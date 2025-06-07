@@ -1,0 +1,73 @@
+// !$*UTF8*$!
+{
+  archiveVersion = 1;
+  classes = {};
+  objectVersion = 55;
+  objects = {
+    000000000000000000000000 /* Project object */ = {
+      isa = PBXProject;
+      buildConfigurationList = 000000000000000000000001 /* Build configuration list for PBXProject */;
+      compatibilityVersion = "Xcode 14.0";
+      developmentRegion = en;
+      hasScannedForEncodings = 0;
+      knownRegions = (
+        en,
+      );
+      mainGroup = 000000000000000000000002;
+      productRefGroup = 000000000000000000000003;
+      targets = (
+        000000000000000000000004 /* MoneyFlowLens */,
+      );
+    };
+    000000000000000000000002 = {
+      isa = PBXGroup;
+      children = (
+        000000000000000000000003 /* Products */,
+      );
+      sourceTree = "<group>";
+    };
+    000000000000000000000003 /* Products */ = {
+      isa = PBXGroup;
+      children = (
+        000000000000000000000005 /* MoneyFlowLens.app */,
+      );
+      name = Products;
+      sourceTree = "<group>";
+    };
+    000000000000000000000005 /* MoneyFlowLens.app */ = {
+      isa = PBXFileReference;
+      explicitFileType = wrapper.application;
+      path = MoneyFlowLens.app;
+      sourceTree = BUILT_PRODUCTS_DIR;
+    };
+    000000000000000000000004 /* MoneyFlowLens */ = {
+      isa = PBXNativeTarget;
+      buildConfigurationList = 000000000000000000000006 /* Build configuration list for PBXNativeTarget */;
+      buildPhases = (
+      );
+      name = MoneyFlowLens;
+      productName = MoneyFlowLens;
+      productReference = 000000000000000000000005 /* MoneyFlowLens.app */;
+      productType = "com.apple.product-type.application";
+    };
+    000000000000000000000001 /* Build configuration list for PBXProject */ = {
+      isa = XCConfigurationList;
+      buildConfigurations = (
+        000000000000000000000007 /* Debug */, 
+        000000000000000000000008 /* Release */ 
+      );
+    };
+    000000000000000000000006 /* Build configuration list for PBXNativeTarget */ = {
+      isa = XCConfigurationList;
+      buildConfigurations = (
+        000000000000000000000009 /* Debug */,
+        000000000000000000000010 /* Release */
+      );
+    };
+    000000000000000000000007 /* Debug */ = { isa = XCBuildConfiguration; name = Debug; };
+    000000000000000000000008 /* Release */ = { isa = XCBuildConfiguration; name = Release; };
+    000000000000000000000009 /* Debug */ = { isa = XCBuildConfiguration; name = Debug; };
+    000000000000000000000010 /* Release */ = { isa = XCBuildConfiguration; name = Release; };
+  };
+  rootObject = 000000000000000000000000 /* Project object */;
+}

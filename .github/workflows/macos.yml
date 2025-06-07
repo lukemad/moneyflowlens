@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Xcode
+        run: sudo xcode-select -s /Applications/Xcode_15.0.app
+      - name: Run Tests
+        run: xcodebuild test -scheme MoneyFlowLens -destination 'platform=macOS'
+      - name: Archive
+        run: |
+          xcodebuild -scheme MoneyFlowLens -configuration Release -archivePath $PWD/MoneyFlowLens.xcarchive archive
+          xcodebuild -exportArchive -archivePath $PWD/MoneyFlowLens.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath $PWD/build
+      - name: Compress DMG
+        run: hdiutil create MoneyFlowLens.dmg -srcfolder build
+      - uses: actions/upload-artifact@v3
+        with:
+          name: MoneyFlowLens.dmg
+          path: MoneyFlowLens.dmg
