@@ -15,9 +15,12 @@ jobs:
         with:
           xcode-version: '15.4'
       - name: Run Tests
-        run: xcodebuild test -project MoneyFlowLens.xcodeproj \
-                        -scheme MoneyFlowLens \
-                        -destination 'platform=macOS'
+        run: |
+          xcodebuild \
+            -project MoneyFlowLens.xcodeproj \
+            -scheme MoneyFlowLens \
+            -destination 'platform=macOS' \
+            test
       - name: Archive
         run: |
           xcodebuild -scheme MoneyFlowLens -configuration Release -archivePath $PWD/MoneyFlowLens.xcarchive archive
