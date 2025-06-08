@@ -13,18 +13,21 @@ struct ContentView: View {
         _vm = StateObject(wrappedValue: vm)
     }
 
+    @ToolbarContentBuilder
+    private var clientListToolbar: some ToolbarContent {
+        ToolbarItemGroup(placement: .primaryAction) {
+            Button(action: addClient) {
+                Label("Add", systemImage: "plus")
+            }
+        }
+    }
+
     var body: some View {
         NavigationSplitView {
             List(clients, selection: $selection) { client in
                 Text(client.displayName)
             }
-            .toolbar {
-                ToolbarItemGroup(placement: .primaryAction) {
-                    Button(action: addClient) {
-                        Label("Add", systemImage: "plus")
-                    }
-                }
-            }
+            .toolbar { clientListToolbar }
         } detail: {
             if let client = selection {
                 ClientDetailView(client: client)
@@ -52,7 +55,15 @@ struct ClientDetailView: View {
         self._client = $client
         _vm = StateObject(wrappedValue: CashFlowViewModel(client: client.wrappedValue))
     }
-    
+
+    @ToolbarContentBuilder
+    private var detailToolbar: some ToolbarContent {
+        ToolbarItemGroup(placement: .primaryAction) {
+            Button("Add Income")  { showIncome  = true }
+            Button("Add Expense") { showExpense = true }
+        }
+    }
+
     var body: some View {
         TabView {
             List {
@@ -67,12 +78,7 @@ struct ClientDetailView: View {
                     }
                 }
             }
-            .toolbar {
-                ToolbarItemGroup(placement: .primaryAction) {
-                    Button("Add Income")  { showIncome  = true }
-                    Button("Add Expense") { showExpense = true }
-                }
-            }
+            .toolbar { detailToolbar }
             .tabItem { Text("Income & Expenses") }
 
             CashFlowDiagram()
