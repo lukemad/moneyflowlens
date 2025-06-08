@@ -15,7 +15,7 @@ struct IncomeFormView: View {
             TextField("Amount", value: $amount, formatter: NumberFormatter())
             Picker("Frequency", selection: $frequency) {
                 ForEach(Frequency.allCases) { freq in
-                    Text(freq.rawValue).tag(freq)
+                    Text(freq.rawValueLabel).tag(freq)
                 }
             }
             DatePicker("Next Due", selection: $nextDue)

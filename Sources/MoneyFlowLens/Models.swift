@@ -2,8 +2,14 @@ import Foundation
 import SwiftData   // still needed
 
 // MARK: - Frequency enum used by both models
-enum Frequency: String, CaseIterable, Codable {
+enum Frequency: String, CaseIterable, Codable, Identifiable {
     case weekly, fortnightly, monthly, yearly
+
+    /// Conformance to ``Identifiable`` allows use in `ForEach` without extra `id:` parameter.
+    var id: Self { self }
+
+    /// User-facing label for picker rows.
+    var rawValueLabel: String { rawValue.capitalized }
 }
 
 // MARK: - ExpenseCategory used by ExpenseItem
@@ -13,18 +19,18 @@ enum ExpenseCategory: String, CaseIterable, Codable {
 
 // MARK: - SwiftData models  (must be classes in Xcode 16+)
 @Model final class Client {
-    var id          : UUID          = .init()
+    var id          : UUID          = UUID()
     var displayName : String        = ""
-    var createdDate : Date          = .now
+    var createdDate : Date          = Date()
     @Relationship(deleteRule: .cascade)
     var income      : [IncomeItem]  = []
     @Relationship(deleteRule: .cascade)
     var expenses    : [ExpenseItem] = []
 
     init(
-        id: UUID = .init(),
+        id: UUID = UUID(),
         displayName: String = "",
-        createdDate: Date = .now,
+        createdDate: Date = Date(),
         income: [IncomeItem] = [],
         expenses: [ExpenseItem] = []
     ) {
@@ -37,20 +43,20 @@ enum ExpenseCategory: String, CaseIterable, Codable {
 }
 
 @Model final class IncomeItem {
-    var id         : UUID        = .init()
+    var id         : UUID        = UUID()
     var sourceName : String      = ""
-    var amount     : Decimal     = .zero
+    var amount     : Decimal     = Decimal.zero
     var frequency  : Frequency   = Frequency.monthly
-    var nextDue    : Date        = .now
+    var nextDue    : Date        = Date()
     @Relationship(inverse: \ExpenseItem.incomeOwner)
     var owner      : Client?     // optional back-link
 
     init(
-        id: UUID = .init(),
+        id: UUID = UUID(),
         sourceName: String = "",
-        amount: Decimal = .zero,
+        amount: Decimal = Decimal.zero,
         frequency: Frequency = Frequency.monthly,
-        nextDue: Date = .now,
+        nextDue: Date = Date(),
         owner: Client? = nil
     ) {
         self.id = id
@@ -63,20 +69,20 @@ enum ExpenseCategory: String, CaseIterable, Codable {
 }
 
 @Model final class ExpenseItem {
-    var id         : UUID            = .init()
+    var id         : UUID            = UUID()
     var payee      : String          = ""
-    var amount     : Decimal         = .zero
+    var amount     : Decimal         = Decimal.zero
     var frequency  : Frequency       = Frequency.monthly
-    var nextDue    : Date            = .now
+    var nextDue    : Date            = Date()
     var category   : ExpenseCategory = ExpenseCategory.discretionary
     @Relationship var incomeOwner    : Client?   // inverse side
 
     init(
-        id: UUID = .init(),
+        id: UUID = UUID(),
         payee: String = "",
-        amount: Decimal = .zero,
+        amount: Decimal = Decimal.zero,
         frequency: Frequency = Frequency.monthly,
-        nextDue: Date = .now,
+        nextDue: Date = Date(),
         category: ExpenseCategory = ExpenseCategory.discretionary,
         incomeOwner: Client? = nil
     ) {
