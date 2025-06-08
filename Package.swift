@@ -6,17 +6,16 @@ import PackageDescription
 let package = Package(
     name: "MoneyFlowLens",
     platforms: [.macOS(.v14)],
-    dependencies: [
-        .package(
-            url: "https://github.com/maxhumber/Sankey",
-            .upToNextMajor(from: "1.0.1")
-        )
-    ],
+    dependencies: [],
     targets: [
+        .target(
+            name: "SankeyCore",
+            path: "ThirdParty/SankeyCore"
+        ),
         .executableTarget(
             name: "MoneyFlowLens",
             dependencies: [
-                .product(name: "Sankey", package: "Sankey")
+                .product(name: "SankeyCore", package: "SankeyCore")
             ]
         ),
         .testTarget(

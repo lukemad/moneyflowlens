@@ -1,5 +1,5 @@
 import SwiftUI
-import Sankey
+import SankeyCore
 
 private let nodes = [
     SankeyNode("Salary"),
@@ -8,8 +8,8 @@ private let nodes = [
 ]
 
 private let links = [
-    SankeyLink(7_500, from: "Salary",   to: "Checking"),
-    SankeyLink(2_000, from: "Checking", to: "Housing")
+    SankeyLink(7500, from: "Salary",   to: "Checking"),
+    SankeyLink(2000, from: "Checking", to: "Housing")
 ]
 
 struct CashFlowDiagram: View {
@@ -17,7 +17,7 @@ struct CashFlowDiagram: View {
 
     var body: some View {
         SankeyDiagram(data)
-            .linkColorMode(.gradient)   // 1.x modifier
+            .linkColorMode(.gradient)
             .nodeOpacity(0.9)
             .frame(height: 340)
             .padding(12)
