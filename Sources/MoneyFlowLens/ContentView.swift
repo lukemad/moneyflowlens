@@ -19,11 +19,15 @@ struct ContentView: View {
                 Text(client.displayName)
             }
             .toolbar {
-                Button(action: addClient) { Label("Add", systemImage: "plus") }
+                ToolbarItemGroup(placement: .primaryAction) {
+                    Button(action: addClient) {
+                        Label("Add", systemImage: "plus")
+                    }
+                }
             }
         } detail: {
             if let client = selection {
-                ClientDetailView(client: $client)
+                ClientDetailView(client: client)
             } else {
                 Text("Select a client")
             }
@@ -43,12 +47,12 @@ struct ClientDetailView: View {
     @StateObject private var vm: CashFlowViewModel
     @State private var showIncome = false
     @State private var showExpense = false
-
+    
     init(client: Binding<Client>) {
-        self._client = client
+        self._client = $client
         _vm = StateObject(wrappedValue: CashFlowViewModel(client: client.wrappedValue))
     }
-
+    
     var body: some View {
         TabView {
             VStack {
@@ -65,27 +69,29 @@ struct ClientDetailView: View {
                     }
                 }
                 .toolbar {
-                    Button("Add Income") { showIncome = true }
-                    Button("Add Expense") { showExpense = true }
+                    ToolbarItemGroup(placement: .primaryAction) {
+                        Button("Add Income")  { showIncome  = true }
+                        Button("Add Expense") { showExpense = true }
+                    }
                 }
+                .tabItem { Text("Income & Expenses") }
+                
+                CashFlowDiagram()
+                    .tabItem { Text("Sankey Diagram") }
+                
+                VStack {
+                    TextField("Name", text: $client.displayName)
+                    Button("Delete") { /* deletion logic */ }
+                }
+                .padding()
+                .tabItem { Text("Settings") }
             }
-            .tabItem { Text("Income & Expenses") }
-
-            CashFlowDiagram()
-                .tabItem { Text("Sankey Diagram") }
-
-            VStack {
-                TextField("Name", text: $client.displayName)
-                Button("Delete") { /* deletion logic */ }
+            .sheet(isPresented: $showIncome) {
+                IncomeFormView { showIncome = false }
             }
-            .padding()
-            .tabItem { Text("Settings") }
-        }
-        .sheet(isPresented: $showIncome) {
-            IncomeFormView { showIncome = false }
-        }
-        .sheet(isPresented: $showExpense) {
-            ExpenseFormView { showExpense = false }
+            .sheet(isPresented: $showExpense) {
+                ExpenseFormView { showExpense = false }
+            }
         }
     }
 }
