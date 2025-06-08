@@ -38,3 +38,50 @@
 git clone https://github.com/lukemad/moneyflowlens.git
 cd moneyflowlens
 open MoneyFlowLens.xcodeproj   # ⌘R to run
+
+Requires macOS 14 + Xcode 15.4 (SwiftData is Sonoma-only).
+
+⸻
+
+🗂 Project structure
+
+MoneyFlowLens.xcodeproj/         Xcode project & shared scheme
+Sources/
+ └─ MoneyFlowLens/
+     ├─ Models/                  SwiftData @Model structs
+     ├─ ViewModels/              Observable view-models
+     ├─ Views/                   SwiftUI screens & components
+     └─ Resources/               Assets & localisation
+Tests/
+ └─ MoneyFlowLensTests/          XCTests (auto-categoriser, view-models)
+.github/
+ └─ workflows/macos.yml          CI: build on macOS-14 runner
+
+
+⸻
+
+🛣 Road-map (v0.2 → v1)
+	•	CSV / OFX import
+	•	PDF export of Sankey diagram
+	•	Dark-mode design polish
+	•	Signed & notarised DMG release
+	•	Localization (🇺🇸 ➜ 🇪🇸 🇫🇷)
+
+⸻
+
+🤝 Contributing
+	1.	Fork the repo & create your branch: git checkout -b feat/my-feature
+	2.	Commit your changes: git commit -m 'feat: add cool feature'
+	3.	Push to the branch: git push origin feat/my-feature
+	4.	Open a pull request.
+
+Please run swiftformat and ensure xcodebuild -scheme MoneyFlowLens build passes before submitting.
+
+⸻
+
+📝 License
+
+Apache-2.0 © 2025 Luke Madden
+See LICENSE for details.
+
+Feel free to tweak any section (e.g., roadmap items, badge URLs) before committing.
