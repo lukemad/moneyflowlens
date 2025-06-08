@@ -7,7 +7,8 @@ let package = Package(
     name: "MoneyFlowLens",
     platforms: [.macOS(.v14)],
     dependencies: [
-        .package(url: "https://github.com/maxhumber/Sankey", from: "0.2.1")
+        .package(url: "https://github.com/maxhumber/Sankey",
+                 .upToNextMajor(from: "1.0.0"))
     ],
     targets: [
         .executableTarget(
