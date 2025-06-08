@@ -9,7 +9,7 @@ final class CashFlowViewModel: ObservableObject {
         self.client = client
     }
 
-    var diagramData: SankeyData {
+    var diagramData: SankeyDataSet {
         let incomeNodes = client.income.map { item in
             SankeyNode(item.sourceName)
         }
@@ -27,10 +27,16 @@ final class CashFlowViewModel: ObservableObject {
                 let incomeAmount = Double(truncating: income.amount as NSNumber)
                 let expenseAmount = Double(truncating: expense.amount as NSNumber)
                 let amount = Swift.min(incomeAmount, expenseAmount)
-                links.append(SankeyLink(amount, from: income.sourceName, to: expense.payee))
+                links.append(
+                    SankeyLink(
+                        source: income.sourceName,
+                        target: expense.payee,
+                        value: amount
+                    )
+                )
             }
         }
 
-        return SankeyData(nodes: allNodes, links: links)
+        return SankeyDataSet(nodes: allNodes, links: links)
     }
 }
