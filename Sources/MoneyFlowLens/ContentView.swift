@@ -55,43 +55,41 @@ struct ClientDetailView: View {
     
     var body: some View {
         TabView {
+            List {
+                Section("Income") {
+                    ForEach(client.income) { item in
+                        Text(item.sourceName)
+                    }
+                }
+                Section("Expenses") {
+                    ForEach(client.expenses) { item in
+                        Text(item.payee)
+                    }
+                }
+            }
+            .toolbar {
+                ToolbarItemGroup(placement: .primaryAction) {
+                    Button("Add Income")  { showIncome  = true }
+                    Button("Add Expense") { showExpense = true }
+                }
+            }
+            .tabItem { Text("Income & Expenses") }
+
+            CashFlowDiagram()
+                .tabItem { Text("Sankey Diagram") }
+
             VStack {
-                List {
-                    Section("Income") {
-                        ForEach(client.income) { item in
-                            Text(item.sourceName)
-                        }
-                    }
-                    Section("Expenses") {
-                        ForEach(client.expenses) { item in
-                            Text(item.payee)
-                        }
-                    }
-                }
-                .toolbar {
-                    ToolbarItemGroup(placement: .primaryAction) {
-                        Button("Add Income")  { showIncome  = true }
-                        Button("Add Expense") { showExpense = true }
-                    }
-                }
-                .tabItem { Text("Income & Expenses") }
-                
-                CashFlowDiagram()
-                    .tabItem { Text("Sankey Diagram") }
-                
-                VStack {
-                    TextField("Name", text: $client.displayName)
-                    Button("Delete") { /* deletion logic */ }
-                }
-                .padding()
-                .tabItem { Text("Settings") }
+                TextField("Name", text: $client.displayName)
+                Button("Delete") { /* deletion logic */ }
             }
-            .sheet(isPresented: $showIncome) {
-                IncomeFormView { showIncome = false }
-            }
-            .sheet(isPresented: $showExpense) {
-                ExpenseFormView { showExpense = false }
-            }
+            .padding()
+            .tabItem { Text("Settings") }
+        }
+        .sheet(isPresented: $showIncome) {
+            IncomeFormView { showIncome = false }
+        }
+        .sheet(isPresented: $showExpense) {
+            ExpenseFormView { showExpense = false }
         }
     }
 }
