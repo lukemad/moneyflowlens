@@ -8,8 +8,8 @@ private let nodes = [
 ]
 
 private let links = [
-    SankeyLink(7500, from: "Salary",   to: "Checking"),
-    SankeyLink(2000, from: "Checking", to: "Housing")
+    SankeyLink(7_500, from: "Salary",   to: "Checking"),
+    SankeyLink(2_000, from: "Checking", to: "Housing")
 ]
 
 struct CashFlowDiagram: View {
