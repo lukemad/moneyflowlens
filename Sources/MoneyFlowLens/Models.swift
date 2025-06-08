@@ -1,56 +1,60 @@
 import Foundation
-import SwiftData
+import SwiftData                 // already present
 
+// MARK: - Client ----------------------------------------------------
 @Model
 struct Client {
-    var id: UUID = UUID()
+    var id:          UUID
     var displayName: String
-    var createdDate: Date = Date()
-    var income: [IncomeItem] = []
-    var expenses: [ExpenseItem] = []
+    var createdDate: Date
+    var income:      [IncomeItem]
+    var expenses:    [ExpenseItem]
 
-    init(id: UUID = .init(),
-         displayName: String = "",
-         createdDate: Date = .now,
-         income: [IncomeItem] = [],
+    init(id: UUID               = .init(),
+         displayName: String    = "",
+         createdDate: Date      = .now,
+         income: [IncomeItem]   = [],
          expenses: [ExpenseItem] = []) {
-        self.id = id
+        self.id          = id
         self.displayName = displayName
         self.createdDate = createdDate
-        self.income = income
-        self.expenses = expenses
+        self.income      = income
+        self.expenses    = expenses
     }
 }
 
+// MARK: - IncomeItem -----------------------------------------------
 @Model
 struct IncomeItem {
-    var id: UUID = UUID()
-    var sourceName: String
-    var amount: Decimal
+    var id:        UUID
+    var sourceName:String
+    var amount:    Decimal
     var frequency: Frequency
-    var nextDue: Date
+    var nextDue:   Date
 
     init(id: UUID = .init(),
          sourceName: String,
          amount: Decimal,
          frequency: Frequency,
          nextDue: Date) {
-        self.id = id
+        self.id         = id
         self.sourceName = sourceName
-        self.amount = amount
-        self.frequency = frequency
-        self.nextDue = nextDue
+        self.amount     = amount
+        self.frequency  = frequency
+        self.nextDue    = nextDue
     }
 }
 
+// MARK: - ExpenseItem ----------------------------------------------
 @Model
 struct ExpenseItem {
-    var id: UUID = UUID()
-    var payee: String
-    var amount: Decimal
+    var id:        UUID
+    var payee:     String
+    var amount:    Decimal
     var frequency: Frequency
-    var nextDue: Date
-    var category: ExpenseCategory = .discretionary
+    var nextDue:   Date
+    var category:  ExpenseCategory = ExpenseCategory.discretionary
+    // ^ fully-qualified default enum value
 
     init(id: UUID = .init(),
          payee: String,
@@ -58,12 +62,12 @@ struct ExpenseItem {
          frequency: Frequency,
          nextDue: Date,
          category: ExpenseCategory = .discretionary) {
-        self.id = id
-        self.payee = payee
-        self.amount = amount
+        self.id        = id
+        self.payee     = payee
+        self.amount    = amount
         self.frequency = frequency
-        self.nextDue = nextDue
-        self.category = category
+        self.nextDue   = nextDue
+        self.category  = category
     }
 
     mutating func autoCategorise() {
