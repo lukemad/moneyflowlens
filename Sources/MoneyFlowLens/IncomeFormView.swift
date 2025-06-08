@@ -5,7 +5,7 @@ struct IncomeFormView: View {
     @Environment(\.modelContext) private var context
     @State private var sourceName = ""
     @State private var amount = 0.0
-    @State private var frequency: Frequency = .monthly
+    @State private var frequency: Frequency = Frequency.monthly
     @State private var nextDue = Date()
     var onSave: () -> Void
 
