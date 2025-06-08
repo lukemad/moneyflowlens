@@ -66,7 +66,7 @@ struct ClientDetailView: View {
             }
             .tabItem { Text("Income & Expenses") }
 
-            CashFlowDiagram(vm: vm)
+            CashFlowDiagram()
                 .tabItem { Text("Sankey Diagram") }
 
             VStack {

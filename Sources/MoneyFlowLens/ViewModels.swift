@@ -11,20 +11,26 @@ final class CashFlowViewModel: ObservableObject {
 
     var diagramData: SankeyData {
         let incomeNodes = client.income.map { item in
-            SankeyData.Node(id: item.id.uuidString, title: item.sourceName, amount: Double(truncating: item.amount as NSNumber))
+            SankeyNode(item.sourceName)
         }
+
         let expenseNodes = client.expenses.map { item in
-            SankeyData.Node(id: item.id.uuidString, title: item.payee, amount: Double(truncating: item.amount as NSNumber))
+            SankeyNode(item.payee)
         }
+
         let allNodes = incomeNodes + expenseNodes
 
-        var links: [SankeyData.Link] = []
-        for i in incomeNodes {
-            for e in expenseNodes {
+        var links: [SankeyLink] = []
+        for income in client.income {
+            for expense in client.expenses {
                 // simple equal split example
-                links.append(SankeyData.Link(source: i.id, target: e.id, value: min(i.amount, e.amount)))
+                let incomeAmount = Double(truncating: income.amount as NSNumber)
+                let expenseAmount = Double(truncating: expense.amount as NSNumber)
+                let amount = Swift.min(incomeAmount, expenseAmount)
+                links.append(SankeyLink(amount, from: income.sourceName, to: expense.payee))
             }
         }
+
         return SankeyData(nodes: allNodes, links: links)
     }
 }
