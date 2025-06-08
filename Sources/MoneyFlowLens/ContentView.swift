@@ -18,7 +18,7 @@ struct ContentView: View {
             }
         } detail: {
             if let client = selection {
-                ClientDetailView(client: client)
+                ClientDetailView(client: $client)
             } else {
                 Text("Select a client")
             }
@@ -39,9 +39,9 @@ struct ClientDetailView: View {
     @State private var showIncome = false
     @State private var showExpense = false
 
-    init(client: Client) {
-        self._client = Bindable(initialValue: client)
-        _vm = StateObject(wrappedValue: CashFlowViewModel(client: client))
+    init(client: Binding<Client>) {
+        self._client = client
+        _vm = StateObject(wrappedValue: CashFlowViewModel(client: client.wrappedValue))
     }
 
     var body: some View {

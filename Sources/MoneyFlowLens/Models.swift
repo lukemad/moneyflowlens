@@ -1,101 +1,43 @@
 import Foundation
-import SwiftData                 // already present
+import SwiftData   // still needed
 
-// MARK: - Client ----------------------------------------------------
-@Model
-struct Client {
-    var id:          UUID
-    var displayName: String
-    var createdDate: Date
-    var income:      [IncomeItem]
-    var expenses:    [ExpenseItem]
-
-    init(id: UUID               = .init(),
-         displayName: String    = "",
-         createdDate: Date      = .now,
-         income: [IncomeItem]   = [],
-         expenses: [ExpenseItem] = []) {
-        self.id          = id
-        self.displayName = displayName
-        self.createdDate = createdDate
-        self.income      = income
-        self.expenses    = expenses
-    }
+// MARK: - Frequency enum used by both models
+enum Frequency: String, CaseIterable, Codable {
+    case weekly, fortnightly, monthly, yearly
 }
 
-// MARK: - IncomeItem -----------------------------------------------
-@Model
-struct IncomeItem {
-    var id:        UUID
-    var sourceName:String
-    var amount:    Decimal
-    var frequency: Frequency
-    var nextDue:   Date
-
-    init(id: UUID = .init(),
-         sourceName: String,
-         amount: Decimal,
-         frequency: Frequency,
-         nextDue: Date) {
-        self.id         = id
-        self.sourceName = sourceName
-        self.amount     = amount
-        self.frequency  = frequency
-        self.nextDue    = nextDue
-    }
+// MARK: - ExpenseCategory used by ExpenseItem
+enum ExpenseCategory: String, CaseIterable, Codable {
+    case housing, investing, savings, householdOverhead, discretionary
 }
 
-// MARK: - ExpenseItem ----------------------------------------------
-@Model
-struct ExpenseItem {
-    var id:        UUID
-    var payee:     String
-    var amount:    Decimal
-    var frequency: Frequency
-    var nextDue:   Date
-    var category:  ExpenseCategory = ExpenseCategory.discretionary
-    // ^ fully-qualified default enum value
-
-    init(id: UUID = .init(),
-         payee: String,
-         amount: Decimal,
-         frequency: Frequency,
-         nextDue: Date,
-         category: ExpenseCategory = .discretionary) {
-        self.id        = id
-        self.payee     = payee
-        self.amount    = amount
-        self.frequency = frequency
-        self.nextDue   = nextDue
-        self.category  = category
-    }
-
-    mutating func autoCategorise() {
-        let p = payee.lowercased()
-        if p.contains("mortgage") || p.contains("rent") || p.contains("utility") || p.contains("insurance") {
-            category = .householdOverhead
-        } else if p.contains("401k") || p.contains("ira") || p.contains("brokerage") {
-            category = .investing
-        } else if p.contains("saving") || p.contains("emergency") {
-            category = .savings
-        } else {
-            category = .discretionary
-        }
-    }
-
-    mutating func save(in context: ModelContext) throws {
-        autoCategorise()
-        context.insert(self)
-        try context.save()
-    }
+// MARK: - SwiftData models  (must be classes in Xcode 16+)
+@Model final class Client {
+    var id          : UUID          = .init()
+    var displayName : String        = ""
+    var createdDate : Date          = .now
+    @Relationship(deleteRule: .cascade)
+    var income      : [IncomeItem]  = []
+    @Relationship(deleteRule: .cascade)
+    var expenses    : [ExpenseItem] = []
 }
 
-enum ExpenseCategory: String, CaseIterable, Identifiable {
-    case householdOverhead, savings, investing, discretionary, other
-    var id: Self { self }
+@Model final class IncomeItem {
+    var id         : UUID        = .init()
+    var sourceName : String      = ""
+    var amount     : Decimal     = .zero
+    var frequency  : Frequency   = .monthly
+    var nextDue    : Date        = .now
+    @Relationship(inverse: \ExpenseItem.incomeOwner)
+    var owner      : Client?     // optional back-link
 }
 
-enum Frequency: String, CaseIterable, Identifiable {
-    case once, weekly, biweekly, monthly, quarterly, yearly
-    var id: Self { self }
+@Model final class ExpenseItem {
+    var id         : UUID            = .init()
+    var payee      : String          = ""
+    var amount     : Decimal         = .zero
+    var frequency  : Frequency       = .monthly
+    var nextDue    : Date            = .now
+    var category   : ExpenseCategory = .discretionary
+    @Relationship var incomeOwner    : Client?   // inverse side
 }

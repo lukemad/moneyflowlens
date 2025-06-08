@@ -1,6 +1,6 @@
 import Foundation
 import SwiftUI
-import SankeyCore
+import SankeyCore   // brings in SankeyDataSet, SankeyLink, etc.
 
 final class CashFlowViewModel: ObservableObject {
     @Published var client: Client
