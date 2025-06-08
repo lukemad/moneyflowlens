@@ -14,7 +14,7 @@ struct ContentView: View {
     }
 
     @ToolbarContentBuilder
-    private var clientListToolbar: some ToolbarContent {
+    private func clientListToolbar() -> some ToolbarContent {
         ToolbarItemGroup(placement: .primaryAction) {
             Button(action: addClient) {
                 Label("Add", systemImage: "plus")
@@ -27,7 +27,7 @@ struct ContentView: View {
             List(clients, selection: $selection) { client in
                 Text(client.displayName)
             }
-            .toolbar { clientListToolbar }
+            .toolbar(content: clientListToolbar)
         } detail: {
             if let client = selection {
                 ClientDetailView(client: client)
@@ -57,7 +57,7 @@ struct ClientDetailView: View {
     }
 
     @ToolbarContentBuilder
-    private var detailToolbar: some ToolbarContent {
+    private func detailToolbar() -> some ToolbarContent {
         ToolbarItemGroup(placement: .primaryAction) {
             Button("Add Income")  { showIncome  = true }
             Button("Add Expense") { showExpense = true }
@@ -78,7 +78,7 @@ struct ClientDetailView: View {
                     }
                 }
             }
-            .toolbar { detailToolbar }
+            .toolbar(content: detailToolbar)
             .tabItem { Text("Income & Expenses") }
 
             CashFlowDiagram()
