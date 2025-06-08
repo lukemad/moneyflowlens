@@ -6,19 +6,41 @@ on:
   pull_request:
 
 jobs:
-  jobs:
   build:
-    runs-on: macos-14
+    runs-on: macos-14     # Apple-silicon runner with Xcode pre-installed
+
     steps:
+    # 1️⃣  Check out your repo
     - uses: actions/checkout@v4
 
+    # 2️⃣  Select Xcode 15.4 (matches the runner image)
     - uses: maxim-lobanov/setup-xcode@v1
       with:
         xcode-version: '15.4'
 
+    # 3️⃣  Build the app (no tests yet)
     - name: Build
       run: |
-        xcodebuild -project MoneyFlowLens.xcodeproj \
-                   -scheme MoneyFlowLens \
-                   -destination 'platform=macOS' \
-                   build | xcpretty
+        xcodebuild \
+          -project MoneyFlowLens.xcodeproj \
+          -scheme MoneyFlowLens \
+          -destination 'platform=macOS' \
+          build | xcpretty
+
+    # 4️⃣  (Optional) Archive + DMG + upload artifact
+    #    Uncomment once the build step is green.
+    #
+    # - name: Archive
+    #   run: |
+    #     xcodebuild -scheme MoneyFlowLens \
+    #       -configuration Release \
+    #       -archivePath $PWD/MoneyFlowLens.xcarchive archive
+    #
+    # - name: Create DMG
+    #   run: hdiutil create MoneyFlowLens.dmg -srcfolder \
+    #         $PWD/MoneyFlowLens.xcarchive/Products/Applications
+    #
+    # - uses: actions/upload-artifact@v4
+    #   with:
+    #     name: MoneyFlowLens.dmg
+    #     path: MoneyFlowLens.dmg
