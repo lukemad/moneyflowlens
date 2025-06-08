@@ -1,24 +1,40 @@
-# MoneyFlowLens
+# 💸 MoneyFlowLens
 
-MoneyFlowLens is a macOS SwiftUI application that helps advisors manage client cash-flows. Income and expenses are stored with SwiftData and visualised as a Sankey diagram. Recurring expense payees are auto-categorised on save.
+**MoneyFlowLens** is a macOS (SwiftUI + SwiftData) desktop app that helps financial‐advisors—or anyone who manages multi-account households—visualise cash-flow with a clean, multi-column Sankey diagram.
 
-This repository contains a Swift Package that can be opened with Xcode. The package declares a macOS 14 target and depends on [Sankey](https://github.com/maxhumber/Sankey) for diagram rendering.
+| Build status | Minimum macOS | Xcode | Swift |
+|-------------|---------------|-------|-------|
+| ![CI](https://img.shields.io/github/actions/workflow/status/ lukemad/moneyflowlens/macos.yml?label=CI) | 14 (Sonoma) | 15.4 | 5.10 |
 
-## Building
+---
 
-1. Open `Package.swift` or `MoneyFlowLens.xcodeproj` in Xcode 15 on macOS 14.
-2. Run the `MoneyFlowLens` scheme to launch the app.
-3. Run the test suite with ⌘U.
+## ✨ Key features
 
-A GitHub Actions workflow is included that runs unit tests and archives the app on macOS runners.
+* **Client manager** – keep multiple households side-by-side.
+* **Income & Expense items** – quick add, edit, delete.
+* **Auto-categorisation** – rule-based tags for overhead, savings, investing, discretionary.
+* **Live Sankey chart** – powered by the open-source `Sankey` Swift package.
+* **SwiftData storage** – everything saved locally in an encrypted SQLite store (FileVault-compatible).
 
-# moneyflowlens
-Scaffold a macOS SwiftUI app called “MoneyFlowLens” that satisfies the spec in README.md:
+---
 
-• SwiftData models (Client, IncomeItem, ExpenseItem) with enums Frequency & ExpenseCategory
-• Sidebar → TabView UI (Income & Expenses, Sankey Diagram, Settings)
-• Add SPM dependency https://github.com/maxhumber/Sankey
-• Implement ExpenseItem.autoCategorise()
-• Provide unit-tests and a GitHub Actions macOS build workflow
+## 🖥 Screenshots
 
-Create an Xcode project and commit all new files on a new branch named `feat/bootstrap-v1`.
+> *Coming soon – feel free to submit a PR with screenshots!*
+
+---
+
+## 🚀 Quick start
+
+### 🍏 Option 1 – Download the nightly DMG
+
+1. Go to **Actions ▸ CI** → pick the latest green run.
+2. Download **MoneyFlowLens.dmg** from *Artifacts*.
+3. Drag **MoneyFlowLens.app** into `/Applications`, open, and start adding clients.
+
+### 🛠 Option 2 – Build from source
+
+```bash
+git clone https://github.com/lukemad/moneyflowlens.git
+cd moneyflowlens
+open MoneyFlowLens.xcodeproj   # ⌘R to run
