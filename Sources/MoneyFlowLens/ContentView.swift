@@ -46,14 +46,14 @@ struct ContentView: View {
 }
 
 struct ClientDetailView: View {
-    @Bindable var client: Client
+    var client: Client
     @StateObject private var vm: CashFlowViewModel
     @State private var showIncome = false
     @State private var showExpense = false
     
-    init(client: Binding<Client>) {
-        self._client = $client
-        _vm = StateObject(wrappedValue: CashFlowViewModel(client: client.wrappedValue))
+    init(client: Client) {
+        self.client = client
+        _vm = StateObject(wrappedValue: CashFlowViewModel(client: client))
     }
 
     @ToolbarContentBuilder
@@ -85,7 +85,7 @@ struct ClientDetailView: View {
                 .tabItem { Text("Sankey Diagram") }
 
             VStack {
-                TextField("Name", text: $client.displayName)
+                TextField("Name", text: $vm.client.displayName)
                 Button("Delete") { /* deletion logic */ }
             }
             .padding()
