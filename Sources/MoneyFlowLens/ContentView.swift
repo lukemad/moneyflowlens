@@ -7,6 +7,11 @@ struct ContentView: View {
     @State private var selection: Client?
     @State private var showIncomeSheet = false
     @State private var showExpenseSheet = false
+    @StateObject private var vm: CashFlowViewModel
+
+    public init(vm: CashFlowViewModel) {
+        _vm = StateObject(wrappedValue: vm)
+    }
 
     var body: some View {
         NavigationSplitView {
