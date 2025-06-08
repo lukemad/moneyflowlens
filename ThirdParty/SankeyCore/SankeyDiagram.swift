@@ -1,3 +1,4 @@
+#if canImport(UIKit)
 import SwiftUI
 import WebKit
 
@@ -154,3 +155,19 @@ struct SankeyDiagram_Previews: PreviewProvider {
         }
     }
 }
+#endif
+
+#if os(macOS)
+import SwiftUI
+
+/// Placeholder for macOS – real native diagram is provided
+/// by MoneyFlowLens/CashFlowDiagram.swift.
+public struct SankeyDiagram: View {
+    public init(_ data: SankeyData) { self.data = data }
+    private let data: SankeyData
+    public var body: some View {
+        Text("SankeyDiagram is iOS-only in the vanilla package.")
+            .font(.callout.italic())
+    }
+}
+#endif
