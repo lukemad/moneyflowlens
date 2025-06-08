@@ -5,7 +5,7 @@ import SwiftData
 struct MoneyFlowLensApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(vm: CashFlowViewModel())
                 .modelContainer(for: Client.self)
         }
     }
