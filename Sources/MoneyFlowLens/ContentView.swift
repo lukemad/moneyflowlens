@@ -13,17 +13,24 @@ struct ContentView: View {
         _vm = StateObject(wrappedValue: vm)
     }
 
+    @ToolbarContentBuilder
+    private func clientListToolbar() -> some ToolbarContent {
+        ToolbarItemGroup(placement: .primaryAction) {
+            Button(action: addClient) {
+                Label("Add", systemImage: "plus")
+            }
+        }
+    }
+
     var body: some View {
         NavigationSplitView {
             List(clients, selection: $selection) { client in
                 Text(client.displayName)
             }
-            .toolbar {
-                Button(action: addClient) { Label("Add", systemImage: "plus") }
-            }
+            .toolbar(content: clientListToolbar)
         } detail: {
             if let client = selection {
-                ClientDetailView(client: $client)
+                ClientDetailView(client: client)
             } else {
                 Text("Select a client")
             }
@@ -39,43 +46,46 @@ struct ContentView: View {
 }
 
 struct ClientDetailView: View {
-    @Bindable var client: Client
+    var client: Client
     @StateObject private var vm: CashFlowViewModel
     @State private var showIncome = false
     @State private var showExpense = false
+    
+    init(client: Client) {
+        self.client = client
+        _vm = StateObject(wrappedValue: CashFlowViewModel(client: client))
+    }
 
-    init(client: Binding<Client>) {
-        self._client = client
-        _vm = StateObject(wrappedValue: CashFlowViewModel(client: client.wrappedValue))
+    @ToolbarContentBuilder
+    private func detailToolbar() -> some ToolbarContent {
+        ToolbarItemGroup(placement: .primaryAction) {
+            Button("Add Income")  { showIncome  = true }
+            Button("Add Expense") { showExpense = true }
+        }
     }
 
     var body: some View {
         TabView {
-            VStack {
-                List {
-                    Section("Income") {
-                        ForEach(client.income) { item in
-                            Text(item.sourceName)
-                        }
-                    }
-                    Section("Expenses") {
-                        ForEach(client.expenses) { item in
-                            Text(item.payee)
-                        }
+            List {
+                Section("Income") {
+                    ForEach(client.income) { item in
+                        Text(item.sourceName)
                     }
                 }
-                .toolbar {
-                    Button("Add Income") { showIncome = true }
-                    Button("Add Expense") { showExpense = true }
+                Section("Expenses") {
+                    ForEach(client.expenses) { item in
+                        Text(item.payee)
+                    }
                 }
             }
+            .toolbar(content: detailToolbar)
             .tabItem { Text("Income & Expenses") }
 
             CashFlowDiagram()
                 .tabItem { Text("Sankey Diagram") }
 
             VStack {
-                TextField("Name", text: $client.displayName)
+                TextField("Name", text: $vm.client.displayName)
                 Button("Delete") { /* deletion logic */ }
             }
             .padding()
