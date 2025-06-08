@@ -1,12 +1,12 @@
 // swift-tools-version: 5.10
-// The swift-tools-version declares the minimum version of Swift required to build this package.
-
 import PackageDescription
 
 let package = Package(
     name: "MoneyFlowLens",
     platforms: [.macOS(.v14)],
-    dependencies: [],
+    products: [
+        .executable(name: "MoneyFlowLens", targets: ["MoneyFlowLens"])
+    ],
     targets: [
         .target(
             name: "SankeyCore",
@@ -14,9 +14,8 @@ let package = Package(
         ),
         .executableTarget(
             name: "MoneyFlowLens",
-            dependencies: [
-                .product(name: "SankeyCore", package: "SankeyCore")
-            ]
+            dependencies: ["SankeyCore"],
+            path: "Sources/MoneyFlowLens"
         ),
         .testTarget(
             name: "MoneyFlowLensTests",
