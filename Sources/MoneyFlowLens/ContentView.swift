@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    @Query(sort: \Client.created) private var clients: [Client]
+    @Query(sort: \Client.createdDate) private var clients: [Client]
     @Environment(\.modelContext) private var context
     @State private var selection: Client?
     @State private var showIncomeSheet = false

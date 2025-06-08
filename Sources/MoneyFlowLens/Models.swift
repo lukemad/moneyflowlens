@@ -5,9 +5,21 @@ import SwiftData
 struct Client {
     var id: UUID = UUID()
     var displayName: String
-    var created: Date = Date()
+    var createdDate: Date = Date()
     var income: [IncomeItem] = []
     var expenses: [ExpenseItem] = []
+
+    init(id: UUID = .init(),
+         displayName: String = "",
+         createdDate: Date = .now,
+         income: [IncomeItem] = [],
+         expenses: [ExpenseItem] = []) {
+        self.id = id
+        self.displayName = displayName
+        self.createdDate = createdDate
+        self.income = income
+        self.expenses = expenses
+    }
 }
 
 @Model
@@ -17,6 +29,18 @@ struct IncomeItem {
     var amount: Decimal
     var frequency: Frequency
     var nextDue: Date
+
+    init(id: UUID = .init(),
+         sourceName: String,
+         amount: Decimal,
+         frequency: Frequency,
+         nextDue: Date) {
+        self.id = id
+        self.sourceName = sourceName
+        self.amount = amount
+        self.frequency = frequency
+        self.nextDue = nextDue
+    }
 }
 
 @Model
@@ -27,6 +51,20 @@ struct ExpenseItem {
     var frequency: Frequency
     var nextDue: Date
     var category: ExpenseCategory = .discretionary
+
+    init(id: UUID = .init(),
+         payee: String,
+         amount: Decimal,
+         frequency: Frequency,
+         nextDue: Date,
+         category: ExpenseCategory = .discretionary) {
+        self.id = id
+        self.payee = payee
+        self.amount = amount
+        self.frequency = frequency
+        self.nextDue = nextDue
+        self.category = category
+    }
 
     mutating func autoCategorise() {
         let p = payee.lowercased()
