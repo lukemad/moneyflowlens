@@ -22,9 +22,9 @@ enum ExpenseCategory: String, CaseIterable, Codable {
     var id          : UUID          = UUID()
     var displayName : String        = ""
     var createdDate : Date          = Date()
-    @Relationship(deleteRule: .cascade)
+    @Relationship(deleteRule: .cascade, inverse: \IncomeItem.owner)
     var income      : [IncomeItem]  = []
-    @Relationship(deleteRule: .cascade)
+    @Relationship(deleteRule: .cascade, inverse: \ExpenseItem.incomeOwner)
     var expenses    : [ExpenseItem] = []
 
     init(
@@ -48,8 +48,7 @@ enum ExpenseCategory: String, CaseIterable, Codable {
     var amount     : Decimal     = Decimal.zero
     var frequency  : Frequency   = Frequency.monthly
     var nextDue    : Date        = Date()
-    @Relationship(inverse: \ExpenseItem.incomeOwner)
-    var owner      : Client?     // optional back-link
+    var owner      : Client?     // optional back-link (inverse declared on Client.income)
 
     init(
         id: UUID = UUID(),
@@ -75,7 +74,7 @@ enum ExpenseCategory: String, CaseIterable, Codable {
     var frequency  : Frequency       = Frequency.monthly
     var nextDue    : Date            = Date()
     var category   : ExpenseCategory = ExpenseCategory.discretionary
-    @Relationship var incomeOwner    : Client?   // inverse side
+    var incomeOwner: Client?   // inverse declared on Client.expenses
 
     init(
         id: UUID = UUID(),

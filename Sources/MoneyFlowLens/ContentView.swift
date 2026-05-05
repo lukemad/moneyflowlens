@@ -5,13 +5,6 @@ struct ContentView: View {
     @Query(sort: \Client.createdDate) private var clients: [Client]
     @Environment(\.modelContext) private var context
     @State private var selection: Client?
-    @State private var showIncomeSheet = false
-    @State private var showExpenseSheet = false
-    @StateObject private var vm: CashFlowViewModel
-
-    public init(vm: CashFlowViewModel) {
-        _vm = StateObject(wrappedValue: vm)
-    }
 
     @ToolbarContentBuilder
     private func clientListToolbar() -> some ToolbarContent {
@@ -46,15 +39,9 @@ struct ContentView: View {
 }
 
 struct ClientDetailView: View {
-    var client: Client
-    @StateObject private var vm: CashFlowViewModel
+    @Bindable var client: Client
     @State private var showIncome = false
     @State private var showExpense = false
-    
-    init(client: Client) {
-        self.client = client
-        _vm = StateObject(wrappedValue: CashFlowViewModel(client: client))
-    }
 
     @ToolbarContentBuilder
     private func detailToolbar() -> some ToolbarContent {
@@ -81,21 +68,21 @@ struct ClientDetailView: View {
             .toolbar(content: detailToolbar)
             .tabItem { Text("Income & Expenses") }
 
-            CashFlowDiagram()
+            CashFlowDiagram(client: client)
                 .tabItem { Text("Sankey Diagram") }
 
             VStack {
-                TextField("Name", text: $vm.client.displayName)
+                TextField("Name", text: $client.displayName)
                 Button("Delete") { /* deletion logic */ }
             }
             .padding()
             .tabItem { Text("Settings") }
         }
         .sheet(isPresented: $showIncome) {
-            IncomeFormView { showIncome = false }
+            IncomeFormView(client: client, onClose: { showIncome = false })
         }
         .sheet(isPresented: $showExpense) {
-            ExpenseFormView { showExpense = false }
+            ExpenseFormView(client: client, onClose: { showExpense = false })
         }
     }
 }
