@@ -52,9 +52,14 @@ extension SankeyDataSet {
         let totalExpenses = expenses.reduce(0.0) { $0 + $1.monthly }
         let delta = totalIncome - totalExpenses
         if delta > 0.005 {
-            links.append(SankeyLink(source: budget, target: "Unallocated", value: delta))
+            // Two hops so the surplus lays out at the same column depth as
+            // Budget → Category → Payee. Without the second hop, Google Sankey
+            // pushes the leaf to the rightmost column and the link band visually
+            // spans two columns.
+            links.append(SankeyLink(source: budget,        target: "Unallocated", value: delta))
+            links.append(SankeyLink(source: "Unallocated", target: "Reserve",     value: delta))
         } else if delta < -0.005 {
-            links.append(SankeyLink(source: "Deficit", target: budget, value: -delta))
+            links.append(SankeyLink(source: "Shortfall", target: budget, value: -delta))
         }
 
         let nodes = Array(Set(links.flatMap { [$0.source, $0.target] })).sorted()
